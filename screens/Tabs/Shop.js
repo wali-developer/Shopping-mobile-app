@@ -38,10 +38,6 @@ export default function Shop(props) {
       });
   };
 
-  // useEffect(() => {
-  //   loadProductsList();
-  // }, [filters?.order]);
-
   // Load products on change navigation
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -92,11 +88,25 @@ export default function Shop(props) {
         />
         <View style={styles.headingRow}>
           <Text style={styles.heading}>Explore</Text>
-          <TouchableOpacity onPress={() => setModalVisibility(true)}>
-            <Feather name="filter" size={23} color={colors.dark} />
-          </TouchableOpacity>
+          {productsList?.length > 0 && (
+            <TouchableOpacity onPress={() => setModalVisibility(true)}>
+              <Feather name="filter" size={23} color={colors.dark} />
+            </TouchableOpacity>
+          )}
         </View>
-        <ProductsList data={productsList} />
+        {productsList?.length > 0 ? (
+          <ProductsList data={productsList} />
+        ) : (
+          <View
+            style={{
+              marginTop: verticalScale(50),
+            }}
+          >
+            <Text style={{ ...textStyles.textSemibold16, textAlign: "center" }}>
+              No product found!
+            </Text>
+          </View>
+        )}
       </SafeAreaView>
 
       {/* Sort Products modal */}

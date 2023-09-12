@@ -45,6 +45,7 @@ export default function PurchasedProductDetails({ route, navigation }) {
   useEffect(() => {
     const product = purchasesProducts?.filter((prod) => prod?.id === id);
     setProductDetails(product[0]);
+    setQuantity(product[0].quantity);
   }, [id]);
 
   return (

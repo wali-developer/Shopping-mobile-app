@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import {
   horizontalScale,
   moderateScale,
@@ -9,20 +9,13 @@ import Checkbox from "../../common/Checkbox";
 import textStyles from "../../../theme/styles";
 import { colors } from "../../../theme/colors";
 import QuantityIncDec from "../../common/QuantityIncDec";
-import { useDispatch } from "react-redux";
 import { Entypo } from "@expo/vector-icons";
-import { removeFromCart } from "../../../redux/cart.slice";
 
-export default function CartItem({ item, toggleCheckbox, selectedItems }) {
-  const [quantity, setQuantity] = useState(1);
-  const dispatch = useDispatch();
+const CartItem = (props) => {
+  const { item, toggleCheckbox, CART, onRemoveItem } = props;
   return (
     <View style={styles.container}>
       <View style={styles.leftColumn}>
-        <Checkbox
-          toggleCheckbox={toggleCheckbox}
-          checked={selectedItems.find((prod) => prod?.id === item?.id)}
-        />
         <View style={styles.prodImage}>
           <Image source={{ uri: item?.image }} style={styles.img} resizeMode="contain" />
         </View>
@@ -39,13 +32,15 @@ export default function CartItem({ item, toggleCheckbox, selectedItems }) {
         </View>
 
         {/* Cross button */}
-        <TouchableOpacity style={styles.cross} onPress={() => dispatch(removeFromCart(item?.id))}>
+        <TouchableOpacity style={styles.cross} onPress={onRemoveItem}>
           <Entypo name="cross" size={18} color={colors.primary} />
         </TouchableOpacity>
       </View>
     </View>
   );
-}
+};
+
+export default memo(CartItem);
 
 const styles = StyleSheet.create({
   container: {
@@ -60,7 +55,6 @@ const styles = StyleSheet.create({
     width: moderateScale(80),
     height: moderateScale(80),
     borderRadius: moderateScale(15),
-    marginLeft: horizontalScale(15),
     backgroundColor: colors.white,
     justifyContent: "center",
     alignItems: "center",

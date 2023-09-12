@@ -12,14 +12,14 @@ const useAddToCart = () => {
     if (exist) {
       Toast.show({
         type: "success",
-        text2: `Quantity of Product ${exist?.title} incremented in your cart.`,
+        text2: `Quantity of Product ${exist?.title?.slice(1, 25)} incremented in your cart.`,
       });
       dispatch(addToCart(product));
     } else {
       dispatch(addToCart(product));
       Toast.show({
         type: "success",
-        text2: `Product ${product?.title} added to your cart`,
+        text2: `Product ${product?.title?.slice(1, 25)} added to your cart`,
       });
     }
   };

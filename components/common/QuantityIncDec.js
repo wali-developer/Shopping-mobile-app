@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { memo } from "react";
 import { horizontalScale, moderateScale, verticalScale } from "../../utils/responsive/metrices";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { colors } from "../../theme/colors";
@@ -7,7 +7,7 @@ import textStyles from "../../theme/styles";
 import { useDispatch } from "react-redux";
 import { decrementQuantity, incrementQuantity } from "../../redux/cart.slice";
 
-export default function QuantityIncDec(props) {
+const QuantityIncDec = (props) => {
   const { item } = props;
   const dispatch = useDispatch();
   return (
@@ -30,7 +30,9 @@ export default function QuantityIncDec(props) {
       </View>
     </>
   );
-}
+};
+
+export default memo(QuantityIncDec);
 
 const styles = StyleSheet.create({
   quantity: {

@@ -1,0 +1,21 @@
+APP FEATURES:
+
+- This shopping app task is designed and developed by me, The design idea is got it from the different resources thorugh 
+the internet. 
+
+- I made sure to follow the instructions outlined in the 'mobile-task.txt' file that I received via email.
+
+- The Shop filters implemented through frontend.
+
+- For Rest APIS integration I have used the fakes store api which can be found through link (https://fakestoreapi.com).
+
+- All filters implmented in the shop except for relevant / irrelevant products, This is quite simple but due The reason to 
+not implment is that the Fake Store API doesn't provide the information needed for that.
+
+
+STEPS TO TEST THE APP:
+
+To test the app, just follow these two simple steps:
+
+1 - npm install
+2 - npx expo start -c

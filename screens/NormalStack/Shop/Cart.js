@@ -1,14 +1,5 @@
-import {
-  StatusBar,
-  StyleSheet,
-  Dimensions,
-  ScrollView,
-  View,
-  SafeAreaView,
-  FlatList,
-  Text,
-} from "react-native";
-import React, { useEffect, useState } from "react";
+import { StatusBar, StyleSheet, View, SafeAreaView, FlatList, Text } from "react-native";
+import React from "react";
 import { colors } from "../../../theme/colors";
 import {
   horizontalScale,
@@ -22,52 +13,29 @@ import PrimaryButton from "../../../components/common/PrimaryButton";
 import { useDispatch, useSelector } from "react-redux";
 import { addMultiplePurchases } from "../../../redux/purchase.slice";
 import Toast from "react-native-toast-message";
-import { removeFromCart } from "../../../redux/cart.slice";
+import { clearCart, removeFromCart } from "../../../redux/cart.slice";
 
 export default function Cart({ navigation }) {
   const dispatch = useDispatch();
   const CART = useSelector((state) => state?.cart);
-  const purchasesProducts = useSelector((state) => state?.purchases);
-  const [selectedItems, setSelectedItems] = useState([]);
-
-  useEffect(() => {
-    setSelectedItems(CART);
-  }, []);
 
   // Get total price of selected item
   const getTotalPrice = () => {
-    return selectedItems?.reduce(
-      (accumulator, item) => accumulator + item.quantity * item.price,
-      0
-    );
-  };
-
-  // Select and Select item for purchase
-  const selectItemForPurchase = (item) => {
-    const exist = selectedItems.find((prod) => prod?.id === item?.id);
-    if (exist) {
-      setSelectedItems(selectedItems.filter((prod) => prod?.id !== item?.id));
-    } else {
-      setSelectedItems((prev) => [...prev, item]);
-    }
+    return CART?.reduce((accumulator, item) => accumulator + item.quantity * item.price, 0);
   };
 
   // Fucntion to Purchase the selected Products
   const purchaseProducts = () => {
-    dispatch(addMultiplePurchases(selectedItems));
-
-    CART.forEach((prod) => {
-      let exist = selectedItems?.filter((item) => item.id === prod.id);
-      if (exist?.length > 0) {
-        dispatch(removeFromCart(exist[0]?.id));
-      } else {
-        return selectedItems;
-      }
-    });
+    dispatch(addMultiplePurchases(CART));
+    dispatch(clearCart());
 
     Toast.show({
       type: "success",
-      text2: `You Purchased the Selected Products!`,
+      text2: `Items Purchased!`,
+    });
+
+    navigation.navigate("Tabs", {
+      screen: "PurchasedProducts",
     });
   };
 
@@ -84,8 +52,11 @@ export default function Cart({ navigation }) {
                   <CartItem
                     item={item}
                     key={item?.id}
-                    selectedItems={selectedItems}
+                    // selectedItems={selectedItems}
                     toggleCheckbox={() => selectItemForPurchase(item)}
+                    onRemoveItem={() => {
+                      dispatch(removeFromCart(item?.id));
+                    }}
                   />
                 )}
                 keyExtractor={(item) => item.id}
@@ -94,10 +65,10 @@ export default function Cart({ navigation }) {
               />
             </View>
             {/* Items Price and shipping details */}
-            {selectedItems.length > 0 && (
+            {CART.length > 0 && (
               <View style={styles.bottomViewContainer}>
                 <View style={[styles.flexRow, styles.priceRow]}>
-                  <Text style={textStyles.textRegular14}>Selected Items</Text>
+                  <Text style={textStyles.textRegular14}>Items</Text>
                   <Text
                     style={{ ...textStyles.textRegular14, color: colors.primary, opacity: 0.8 }}
                   >
